@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Community Event Portal</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    nav a { margin-right: 15px; text-decoration: none; color: #007BFF; }
+    #welcomeBanner { background-color: lightblue; padding: 10px; margin-bottom: 20px; }
+    .highlight { background-color: yellow; font-weight: bold; }
+    table img { width: 100px; height: auto; border: 2px solid #333; }
+    form { border: 1px solid #ccc; padding: 15px; margin-top: 20px; }
+    video { display: block; margin-top: 20px; width: 320px; }
+    #locationResult { margin-top: 10px; font-style: italic; }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#events">Events</a>
+    <a href="contact.html" target="_blank">Contact</a>
+    <a href="help.html" target="_blank">Help</a>
+  </nav>
+
+  <!-- Welcome Banner -->
+  <div id="welcomeBanner">
+    Welcome back, <span class="highlight">Community Member!</span>
+    <span style="color: red; font-weight: bold;"> Special Offer Today Only!</span>
+  </div>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Events Section -->
+    <section id="events">
+      <h2>Past Community Events</h2>
+      <table>
+        <caption>Highlights from Recent Events</caption>
+        <tr>
+          <td><img src="img1.jpg" alt="Event 1" title="Music Festival" class="highlight" /></td>
+          <td><img src="img2.jpg" alt="Event 2" title="Food Drive" class="highlight" /></td>
+          <td><img src="img3.jpg" alt="Event 3" title="Tree Planting" class="highlight" /></td>
+        </tr>
+        <tr>
+          <td><img src="img4.jpg" alt="Event 4" title="Book Fair" class="highlight" /></td>
+          <td><img src="img5.jpg" alt="Event 5" title="Marathon" class="highlight" /></td>
+          <td><img src="img6.jpg" alt="Event 6" title="Art Show" class="highlight" /></td>
+        </tr>
+      </table>
+    </section>
+
+    <!-- Registration Form -->
+    <section id="register">
+      <h2>Register for an Event</h2>
+      <form onsubmit="showConfirmation(); return false;">
+        <label>Name: <input type="text" id="name" required placeholder="Your full name" autofocus /></label><br />
+        <label>Email: <input type="email" id="email" required placeholder="you@example.com" /></label><br />
+        <label>Phone: <input type="text" id="phone" onblur="validatePhone(this)" /></label><br />
+        <label>Date: <input type="date" required /></label><br />
+        <label>Event Type:
+          <select id="eventType" onchange="displayFee(); savePreference();" required>
+            <option value="">Select one</option>
+            <option value="music">Music</option>
+            <option value="food">Food</option>
+            <option value="nature">Nature</option>
+          </select>
+        </label>
+        <div id="feeDisplay"></div>
+        <label>Message:<br />
+          <textarea id="feedback" onkeyup="countChars()" onkeydown="countChars()" placeholder="Your comments..."></textarea>
+        </label>
+        <div>Characters: <span id="charCount">0</span></div>
+        <button type="submit" onclick="showConfirmation()">Submit</button>
+        <button type="button" onclick="clearPreferences()">Clear Preferences</button>
+        <output id="confirmationMsg"></output>
+      </form>
+    </section>
+
+    <!-- Video Invite -->
+    <section id="video">
+      <h2>Event Promo Video</h2>
+      <video controls oncanplay="document.getElementById('videoStatus').textContent='Video ready to play';">
+        <source src="promo.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      <div id="videoStatus"></div>
+    </section>
+
+    <!-- Geolocation -->
+    <section id="geolocation">
+      <h2>Find Nearby Events</h2>
+      <button onclick="getLocation()">Find Nearby Events</button>
+      <div id="locationResult"></div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Community Portal</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Phone validation on blur
+    function validatePhone(field) {
+      const regex = /^[0-9]{10}$/;
+      if (!regex.test(field.value)) {
+        alert("Please enter a valid 10-digit phone number.");
+      }
+    }
+
+    // Display event fee
+    function displayFee() {
+      const fees = { music: "$20", food: "$10", nature: "$15" };
+      const type = document.getElementById("eventType").value;
+      document.getElementById("feeDisplay").textContent = type ? "Fee: " + fees[type] : "";
+    }
+
+    // Confirmation message on submit
+    function showConfirmation() {
+      document.getElementById("confirmationMsg").value = "✅ Registration submitted successfully!";
+    }
+
+    // Character count in textarea
+    function countChars() {
+      const feedback = document.getElementById("feedback").value;
+      document.getElementById("charCount").textContent = feedback.length;
+    }
+
+    // onbeforeunload warning
+    window.onbeforeunload = function (e) {
+      const name = document.getElementById("name")?.value;
+      const email = document.getElementById("email")?.value;
+      const feedback = document.getElementById("feedback")?.value;
+      if (name || email || feedback) {
+        const msg = "You have unsaved changes, are you sure you want to leave?";
+        (e || window.event).returnValue = msg;
+        return msg;
+      }
+    };
+
+    // Save selected event type to localStorage
+    function savePreference() {
+      const select = document.getElementById('eventType');
+      localStorage.setItem('preferredEventType', select.value);
+      sessionStorage.setItem('tempSelection', select.value);
+    }
+
+    // Load saved preference on page load
+    window.onload = function () {
+      const savedEvent = localStorage.getItem('preferredEventType');
+      if (savedEvent) {
+        const select = document.getElementById('eventType');
+        select.value = savedEvent;
+        displayFee();
+      }
+    };
+
+    // Clear stored preferences
+    function clearPreferences() {
+      localStorage.removeItem('preferredEventType');
+      sessionStorage.clear();
+      alert("Preferences cleared.");
+      document.getElementById('eventType').value = "";
+      document.getElementById('feeDisplay').textContent = "";
+    }
+
+    // Geolocation: Get user's current position with high accuracy
+    function getLocation() {
+      const locationDisplay = document.getElementById("locationResult");
+
+      if (!navigator.geolocation) {
+        locationDisplay.textContent = "Geolocation is not supported by your browser.";
+        return;
+      }
+
+      locationDisplay.textContent = "Locating...";
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude.toFixed(6);
+          const lon = position.coords.longitude.toFixed(6);
+          locationDisplay.textContent = `📍 Your location: Latitude ${lat}, Longitude ${lon}`;
+        },
+        (error) => {
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              locationDisplay.textContent = "❌ Permission denied. Please allow location access.";
+              break;
+            case error.POSITION_UNAVAILABLE:
+              locationDisplay.textContent = "⚠️ Location information is unavailable.";
+              break;
+            case error.TIMEOUT:
+              locationDisplay.textContent = "⏰ Location request timed out. Try again.";
+              break;
+            default:
+              locationDisplay.textContent = "An unknown error occurred.";
+          }
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0
+        }
+      );
+    }
+  </script>
+</body>
+</html>

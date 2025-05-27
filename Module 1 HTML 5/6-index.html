@@ -1,0 +1,36 @@
+<!-- Event Feedback Section -->
+<section id="feedback">
+  <h2 style="text-align:center;">Event Feedback</h2>
+  
+  <form id="feedbackForm" style="max-width: 500px; margin: auto;">
+    <!-- Phone Number Field with Validation -->
+    <label for="phone">Phone Number:</label>
+    <input type="text" id="phone" placeholder="123-456-7890" onblur="validatePhone()" required />
+
+    <!-- Dropdown for Event Fee -->
+    <label for="eventSelect">Choose Event:</label>
+    <select id="eventSelect" onchange="showFee()">
+      <option value="">-- Select an event --</option>
+      <option value="Workshop">Workshop ($25)</option>
+      <option value="Seminar">Seminar ($40)</option>
+      <option value="Festival">Festival (Free)</option>
+    </select>
+
+    <p id="feeDisplay" style="font-weight: bold; margin-top: 5px;"></p>
+
+    <!-- Image with dblclick to Enlarge -->
+    <label>Event Poster:</label><br/>
+    <img id="poster" src="event1.jpg" alt="Event Poster" title="Double-click to enlarge" 
+         ondblclick="enlargeImage()" style="width: 200px; border: 2px solid #333; cursor: pointer;" />
+
+    <!-- Feedback Textarea with Key Event Counter -->
+    <label for="feedbackMsg">Your Feedback:</label>
+    <textarea id="feedbackMsg" rows="4" placeholder="Type your feedback..." oninput="countChars()"></textarea>
+    <p id="charCount">Characters: 0</p>
+
+    <!-- Submit Button with onclick -->
+    <button type="button" onclick="showSubmitConfirmation()">Submit Feedback</button>
+
+    <output id="feedbackConfirmation"></output>
+  </form>
+</section>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Event Portal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f7f7f7;
+    }
+
+    nav ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      gap: 15px;
+      background-color: #333;
+      padding: 10px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+    }
+
+    #welcomeBanner {
+      background-color: #007BFF;
+      color: white;
+      padding: 1em;
+      text-align: center;
+    }
+
+    .highlight {
+      background-color: yellow;
+      font-weight: bold;
+      padding: 0.2em;
+    }
+
+    form {
+      background: white;
+      padding: 20px;
+      margin: 20px auto;
+      width: 400px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    form label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    form input, form select, form textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    form button {
+      margin-top: 15px;
+      padding: 10px;
+      width: 100%;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    form button:hover {
+      background-color: #0056b3;
+    }
+
+    output {
+      display: block;
+      margin-top: 15px;
+      color: green;
+      font-weight: bold;
+    }
+
+    #videoInvite video {
+      display: block;
+      margin: auto;
+    }
+
+    .clear-btn {
+      margin: 10px 0;
+      background-color: crimson;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#events">Events</a></li>
+      <li><a href="#register">Register</a></li>
+      <li><a href="#feedback">Feedback</a></li>
+      <li><a href="#videoInvite">Video</a></li>
+      <li><a href="help.html" target="_blank">Help</a></li>
+    </ul>
+  </nav>
+
+  <!-- Welcome Banner -->
+  <div id="welcomeBanner">
+    Welcome back, <span class="highlight">User!</span>
+    <span style="color: red; font-weight: bold;">Special Offer: 20% off all events today!</span>
+  </div>
+
+  <!-- Event Registration Form -->
+  <section id="register">
+    <h2 style="text-align:center;">Event Registration</h2>
+    <form onsubmit="event.preventDefault(); document.getElementById('confirmation').value = 'Thank you for registering!'">
+      <label for="name">Full Name:</label>
+      <input type="text" id="name" name="name" placeholder="Enter your full name" required autofocus />
+
+      <label for="email">Email Address:</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required />
+
+      <label for="eventDate">Event Date:</label>
+      <input type="date" id="eventDate" name="eventDate" required />
+
+      <label for="eventType">Event Type:</label>
+      <select id="eventType" name="eventType" required onchange="savePreference()">
+        <option value="">--Select an event--</option>
+        <option value="workshop">Workshop</option>
+        <option value="seminar">Seminar</option>
+        <option value="festival">Festival</option>
+      </select>
+
+      <label for="message">Message:</label>
+      <textarea id="message" name="message" rows="4" placeholder="Optional message..."></textarea>
+
+      <button type="submit">Submit Registration</button>
+      <output id="confirmation"></output>
+
+      <button type="button" class="clear-btn" onclick="clearPreferences()">Clear Preferences</button>
+    </form>
+  </section>
+
+  <!-- Feedback Section -->
+  <section id="feedback">
+    <h2 style="text-align:center;">Event Feedback</h2>
+    <form id="feedbackForm" style="max-width: 500px; margin: auto;">
+      <label for="phone">Phone Number:</label>
+      <input type="text" id="phone" placeholder="123-456-7890" onblur="validatePhone()" required />
+
+      <label for="eventSelect">Choose Event:</label>
+      <select id="eventSelect" onchange="showFee()">
+        <option value="">-- Select an event --</option>
+        <option value="Workshop">Workshop ($25)</option>
+        <option value="Seminar">Seminar ($40)</option>
+        <option value="Festival">Festival (Free)</option>
+      </select>
+      <p id="feeDisplay" style="font-weight: bold; margin-top: 5px;"></p>
+
+      <label>Event Poster:</label><br/>
+      <img id="poster" src="event1.jpg" alt="Event Poster" title="Double-click to enlarge"
+        ondblclick="enlargeImage()" style="width: 200px; border: 2px solid #333; cursor: pointer;" />
+
+      <label for="feedbackMsg">Your Feedback:</label>
+      <textarea id="feedbackMsg" rows="4" placeholder="Type your feedback..." oninput="countChars()"></textarea>
+      <p id="charCount">Characters: 0</p>
+
+      <button type="button" onclick="showSubmitConfirmation()">Submit Feedback</button>
+      <output id="feedbackConfirmation"></output>
+    </form>
+  </section>
+
+  <!-- Video Invite Section -->
+  <section id="videoInvite">
+    <h2 style="text-align:center;">Event Promo Video</h2>
+    <video id="promoVideo" width="600" controls oncanplay="videoReady()">
+      <source src="promo.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <p id="videoStatus" style="text-align:center; font-weight: bold; margin-top: 10px;"></p>
+  </section>
+
+  <!-- Geolocation Feature -->
+  <section id="geolocation" style="text-align: center; margin-top: 40px;">
+    <h2>Find Nearby Events</h2>
+    <button onclick="getLocation()" style="padding: 10px 20px; font-size: 16px;">Find Nearby Events</button>
+    <p id="locationResult" style="margin-top: 15px; font-weight: bold;"></p>
+  </section>
+
+  <!-- JavaScript -->
+  <script>
+    // Validate phone number on blur
+    function validatePhone() {
+      const phoneInput = document.getElementById('phone');
+      const pattern = /^\d{3}-\d{3}-\d{4}$/;
+      if (!pattern.test(phoneInput.value)) {
+        alert('Please enter a valid phone number (e.g., 123-456-7890)');
+        phoneInput.focus();
+      }
+    }
+
+    // Show fee based on dropdown selection
+    function showFee() {
+      const feeDisplay = document.getElementById('feeDisplay');
+      const event = document.getElementById('eventSelect').value;
+      let feeText = '';
+
+      switch (event) {
+        case 'Workshop':
+          feeText = 'Fee: $25';
+          break;
+        case 'Seminar':
+          feeText = 'Fee: $40';
+          break;
+        case 'Festival':
+          feeText = 'Fee: Free!';
+          break;
+        default:
+          feeText = '';
+      }
+
+      feeDisplay.textContent = feeText;
+    }
+
+    // Enlarge image on double-click
+    function enlargeImage() {
+      const img = document.getElementById('poster');
+      img.style.width = img.style.width === '400px' ? '200px' : '400px';
+    }
+
+    // Count characters in feedback textarea
+    function countChars() {
+      const text = document.getElementById('feedbackMsg').value;
+      document.getElementById('charCount').textContent = `Characters: ${text.length}`;
+    }
+
+    // Confirm feedback submission
+    function showSubmitConfirmation() {
+      document.getElementById('feedbackConfirmation').value = "Thanks for your feedback!";
+    }
+
+    // Video ready message
+    function videoReady() {
+      document.getElementById('videoStatus').textContent = "🎬 Video ready to play!";
+    }
+
+    // Warn users before leaving if they started filling out a form
+    window.onbeforeunload = function (e) {
+      const nameField = document.getElementById('name');
+      const emailField = document.getElementById('email');
+      const feedbackField = document.getElementById('feedbackMsg');
+
+      if (nameField?.value || emailField?.value || feedbackField?.value) {
+        const confirmationMessage = "You have unsaved changes, are you sure you want to leave?";
+        (e || window.event).returnValue = confirmationMessage; // For older browsers
+        return confirmationMessage;
+      }
+    };
+
+    // Save selected event type to localStorage
+    function savePreference() {
+      const select = document.getElementById('eventType');
+      localStorage.setItem('preferredEventType', select.value);
+      sessionStorage.setItem('tempSelection', select.value);
+    }
+
+    // Load saved preference on page load
+    window.onload = function() {
+      const savedEvent = localStorage.getItem('preferredEventType');
+      if (savedEvent) {
+        const select = document.getElementById('eventType');
+        select.value = savedEvent;
+      }
+    };
+
+    // Clear stored preferences
+    function clearPreferences() {
+      localStorage.removeItem('preferredEventType');
+      sessionStorage.clear();
+      alert("Preferences cleared.");
+      document.getElementById('eventType').value = "";
+    }
+
+    // Geolocation: Get user's current position with high accuracy
+    function getLocation() {
+      const locationDisplay = document.getElementById("locationResult");
+
+      if (!navigator.geolocation) {
+        locationDisplay.textContent = "Geolocation is not supported by your browser.";
+        return;
+      }
+
+      locationDisplay.textContent = "Locating...";
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude.toFixed(6);
+          const lon = position.coords.longitude.toFixed(6);
+          locationDisplay.textContent = `📍 Your location: Latitude ${lat}, Longitude ${lon}`;
+        },
+        (error) => {
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              locationDisplay.textContent = "❌ Permission denied. Please allow location access.";
+              break;
+            case error.POSITION_UNAVAILABLE:
+              locationDisplay.textContent = "⚠️ Location information is unavailable.";
+              break;
+            case error.TIMEOUT:
+              locationDisplay.textContent = "⏰ Location request timed out. Try again.";
+              break;
+            default:
+              locationDisplay.textContent = "An unknown error occurred.";
+          }
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0
+        }
+      );
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<script>
+  function validatePhone() {
+    const phoneInput = document.getElementById('phone');
+    const pattern = /^\d{3}-\d{3}-\d{4}$/;
+    if (!pattern.test(phoneInput.value)) {
+      alert('Please enter a valid phone number (e.g., 123-456-7890)');
+      phoneInput.focus();
+    }
+  }
+
+  function showFee() {
+    const feeDisplay = document.getElementById('feeDisplay');
+    const event = document.getElementById('eventSelect').value;
+
+    let feeText = '';
+    switch (event) {
+      case 'Workshop':
+        feeText = 'Fee: $25';
+        break;
+      case 'Seminar':
+        feeText = 'Fee: $40';
+        break;
+      case 'Festival':
+        feeText = 'Fee: Free!';
+        break;
+      default:
+        feeText = '';
+    }
+
+    feeDisplay.textContent = feeText;
+  }
+
+  function enlargeImage() {
+    const img = document.getElementById('poster');
+    img.style.width = img.style.width === '400px' ? '200px' : '400px';
+  }
+
+  function countChars() {
+    const text = document.getElementById('feedbackMsg').value;
+    document.getElementById('charCount').textContent = `Characters: ${text.length}`;
+  }
+
+  function showSubmitConfirmation() {
+    document.getElementById('feedbackConfirmation').value = "Thanks for your feedback!";
+  }
+</script>

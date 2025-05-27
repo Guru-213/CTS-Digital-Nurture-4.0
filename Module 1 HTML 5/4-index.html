@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portal Navigation</title>
+  <style>
+    /* Internal CSS */
+    #welcomeBanner {
+      background-color: #007BFF;
+      color: white;
+      padding: 1em;
+      text-align: center;
+    }
+
+    .highlight {
+      background-color: yellow;
+      font-weight: bold;
+      padding: 0.2em;
+    }
+
+    .event-img {
+      border: 3px solid #333;
+      width: 200px;
+      height: auto;
+      padding: 5px;
+    }
+
+    table {
+      margin: 20px auto;
+      border-collapse: collapse;
+      text-align: center;
+    }
+
+    caption {
+      caption-side: top;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#events">Events</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="help.html" target="_blank">Help</a></li>
+    </ul>
+  </nav>
+
+  <!-- Welcome Banner -->
+  <div id="welcomeBanner">
+    Welcome back, <span class="highlight">User!</span>  
+    <span style="color: red; font-weight: bold;">Special Offer: 20% off all events today!</span>
+  </div>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Home Section -->
+    <section id="home">
+      <h1 class="highlight">Welcome to the Portal</h1>
+      <p>This is the home section.</p>
+    </section>
+
+    <!-- Events Section -->
+    <section id="events">
+      <h2>Upcoming Events</h2>
+      <p class="highlight">Don't miss out on our latest workshops!</p>
+
+      <!-- Image Gallery -->
+      <table>
+        <caption>Community Event Highlights</caption>
+        <tr>
+          <td>
+            <img src="event1.jpg" alt="Music Festival" title="Music Festival 2024" class="event-img" />
+            <p>Music Festival</p>
+          </td>
+          <td>
+            <img src="event2.jpg" alt="Art Workshop" title="Art Workshop 2024" class="event-img" />
+            <p>Art Workshop</p>
+          </td>
+          <td>
+            <img src="event3.jpg" alt="Outdoor Yoga" title="Outdoor Yoga 2024" class="event-img" />
+            <p>Outdoor Yoga</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <img src="event4.jpg" alt="Coding Bootcamp" title="Coding Bootcamp 2024" class="event-img" />
+            <p>Coding Bootcamp</p>
+          </td>
+          <td>
+            <img src="event5.jpg" alt="Food Fair" title="Food Fair 2024" class="event-img" />
+            <p>Food Fair</p>
+          </td>
+          <td>
+            <img src="event6.jpg" alt="Charity Run" title="Charity Run 2024" class="event-img" />
+            <p>Charity Run</p>
+          </td>
+        </tr>
+      </table>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+      <h2>Contact Us</h2>
+      <p>Email us for <span class="highlight">priority support</span>.</p>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Portal Inc.</p>
+  </footer>
+</body>
+</html>
